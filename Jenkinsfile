@@ -39,13 +39,12 @@ pipeline {
                 }
             }
         }
-        stage('Cleanup') {
+        stage('Create a container') {
             steps {
                 script {
-                    sh "docker rmi ${IMAGE_NAME}"
+                    sh "docker run -itd ${IMAGE_NAME} "
                 }
             }
         }
-        
     }
-}
+}    
