@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "rizz1402/jenkins_pipeline:latest"
+        IMAGE_NAME = "739275480317.dkr.ecr.ap-south-1.amazonaws.com/rizwanrepo:latest"
     }
 
     stages {
@@ -23,16 +23,15 @@ pipeline {
                 }
             }
         }
-        stage('Login to DockerHub') {
+        stage('Login to ECR') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
-                    }
+                    sh aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 739275480317.dkr.ecr.ap-south-1.amazonaws.com
+                    
                 }
             }
         }
-        stage('Push to DockerHub') {
+        stage('Push to ECR') {
             steps {
                 script {
                     sh "docker push ${IMAGE_NAME}"
